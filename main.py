@@ -5,6 +5,10 @@ from src import file_system
 
 
 def read_file():
+    """
+    Read a file content where file name received from the user.
+    :return: none
+    """
     filename = input("Enter file name : ")
     if os.path.isfile(filename):
         data = file_system.read_file(filename)
@@ -14,6 +18,10 @@ def read_file():
 
 
 def create_file():
+    """
+    Creates a file with random name and writes the content received from user to the created file.
+    :return: none
+    """
     content = input("Enter file content : ")
     prefix_length = 4
     file_name = file_system.create_file(content, prefix_length)
@@ -21,6 +29,10 @@ def create_file():
 
 
 def delete_file():
+    """
+    Deletes a file where file name received from the user.
+    :return: none
+    """
     filename = input("Enter file name : ")
     print(f"delete file : {filename}")
     if os.path.isfile(filename):
@@ -30,6 +42,10 @@ def delete_file():
 
 
 def list_dir():
+    """
+    Shows the list of files in current directory.
+    :return: none
+    """
     print(f"List dir {os.getcwd()}")
     print(os.listdir())
 
@@ -41,7 +57,16 @@ def change_dir():
     if result:
         print("Set path " + os.getcwd())
     else:
-        print("Already in current directory")
+        print("Already in current directory or directory does not exist")
+
+
+def get_file_metadata():
+    filename = input("Enter file name : ")
+    data = file_system.get_file_metadata(filename)
+    if data == None:
+        print("File data does not exist")
+    else:
+        print(data)
 
 
 def main():
@@ -56,7 +81,8 @@ def main():
         "create": create_file,
         "delete": delete_file,
         "ls": list_dir,
-        "cd": change_dir
+        "cd": change_dir,
+        "get meta": get_file_metadata
     }
     while True:
         command = input("Enter command: ")
