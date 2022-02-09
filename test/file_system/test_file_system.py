@@ -1,5 +1,6 @@
 from mock import mock_open
 from src import file_system
+import os
 
 
 def test_create_file_success_flow(mocker):
@@ -55,11 +56,14 @@ def test_change_dir_not_exist(mocker):
 
 def test_get_metadata(mocker):
     mocker_os_stat = mocker.patch('os.stat')
-    result = {"a": "aaa", "b": "bbb", "c": "ccc"}
-    mocker_os_stat.return_value = result
+    mocker_get_metadata = mocker.patch('src.file_system.get_file_metadata')
 
-    mocker_is_file_exist = mocker.patch('os.path.isfile')
-    mocker_is_file_exist.return_value = True
+    def side_effect(filename):
+        return os.stat(filename)
+    mocker_get_metadata.side_effect = side_effect
+
+    result = {'a': "aaa", 'b': "bbb", 'c': "ccc"}
+    mocker_os_stat.return_value = result
 
     actual_result = file_system.get_file_metadata('some_existed_file')
 

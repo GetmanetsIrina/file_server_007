@@ -1,5 +1,6 @@
 import os
 from src import utils
+import logging
 
 
 def read_file(filename: str) -> str:
@@ -8,8 +9,11 @@ def read_file(filename: str) -> str:
     :param filename: The name of file for reading
     :return: the file content
     """
+    logging.getLogger("telemetry").info("start reading")
     with open(filename, "r") as f:
         data = f.read()
+        logging.info("File data is read")
+        logging.getLogger("telemetry").info("stop reading")
     return data
 
 
@@ -23,6 +27,7 @@ def get_unique_file_name(length: int) -> str:
     filename = utils.get_random_string(length)
     while os.path.isfile(filename) or os.path.isdir(filename):
         filename = utils.get_random_string(length)
+        logging.info("Random name creation")
     return filename
 
 
@@ -37,6 +42,7 @@ def create_file(content: str, prefix_length: int) -> str:
     file_name = get_unique_file_name(prefix_length)
     with open(file_name, "w") as f:
         f.write(content)
+        logging.info("File data is written")
     return file_name
 
 
@@ -48,6 +54,7 @@ def delete_file(filename: str):
     :return: none
     """
     os.remove(filename)
+    logging.info("Remove File")
 
 
 def list_dir() -> list:
@@ -57,6 +64,7 @@ def list_dir() -> list:
     :return: the list of the directories
     """
     return os.listdir()
+    logging.info("Ls")
 
 
 def change_dir(directory: str) -> bool:
@@ -72,9 +80,9 @@ def change_dir(directory: str) -> bool:
         return True
     return False
 
-def get_file_metadata(filename):
+def get_file_metadata(filename: str):
     """
-    Gets metadata of file
+    Gets the metadata of file: creation data, modification data, size
     :param filename: file name to get metadata of
     :return: file metadata in case of file existence, None - otherwise
     """
@@ -82,4 +90,5 @@ def get_file_metadata(filename):
         data = os.stat(filename)
         out = {'creation_data': data.st_atime, 'mod_data': data.st_mtime, 'size': data.st_size}
         return out
+    logging.warning(f"File {filename} does not exist")
     return None

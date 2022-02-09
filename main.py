@@ -2,6 +2,8 @@
 import argparse
 import os
 from src import file_system
+import logging
+import src.logger
 
 
 def read_file():
@@ -64,6 +66,7 @@ def get_file_metadata():
     filename = input("Enter file name : ")
     data = file_system.get_file_metadata(filename)
     if data == None:
+        logging.warning("File data does not exist")
         print("File data does not exist")
     else:
         print(data)
